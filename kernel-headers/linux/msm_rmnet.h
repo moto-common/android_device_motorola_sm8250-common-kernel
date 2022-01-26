@@ -1,12 +1,10 @@
 /* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 /*
- * Copyright (c) 2018-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
  */
 
 #ifndef _MSM_RMNET_H_
 #define _MSM_RMNET_H_
-
-#include <linux/types.h>
 
 /* Bitmap macros for RmNET driver operation mode. */
 #define RMNET_MODE_NONE     (0x00)
@@ -66,8 +64,6 @@
 #define RMNET_IOCTL_DEREGISTER_DEV             0x0016   /* Dereg a net dev */
 #define RMNET_IOCTL_GET_SG_SUPPORT             0x0017   /* Query sg support*/
 #define RMNET_IOCTL_SET_OFFLOAD                0x0018   /* Set IPA offload */
-#define RMNET_IOCTL_GET_MTU                    0x0019   /* Get v4/v6 MTU   */
-#define RMNET_IOCTL_SET_MTU                    0x0020   /* Set v4/v6 MTU   */
 
 /* Return values for the RMNET_IOCTL_GET_SUPPORTED_FEATURES IOCTL */
 #define RMNET_IOCTL_FEAT_NOTIFY_MUX_CHANNEL              (1<<0)
@@ -105,60 +101,52 @@
 #endif
 
 struct rmnet_ioctl_extended_s {
-	__u32   extended_ioctl;
+	uint32_t   extended_ioctl;
 	union {
-		__u32 data; /* Generic data field for most extended IOCTLs */
+		uint32_t data; /* Generic data field for most extended IOCTLs */
 
 		/* Return values for
 		 *    RMNET_IOCTL_GET_DRIVER_NAME
 		 *    RMNET_IOCTL_GET_DFLT_CONTROL_CHANNEL
 		 */
-		__s8 if_name[IFNAMSIZ];
+		int8_t if_name[IFNAMSIZ];
 
 		/* Input values for the RMNET_IOCTL_ADD_MUX_CHANNEL IOCTL */
 		struct {
-			__u32  mux_id;
-			__s8    vchannel_name[IFNAMSIZ];
+			uint32_t  mux_id;
+			int8_t    vchannel_name[IFNAMSIZ];
 		} rmnet_mux_val;
 
 		/* Input values for the RMNET_IOCTL_FLOW_CONTROL IOCTL */
 		struct {
-			__u8   flow_mode;
-			__u8   mux_id;
+			uint8_t   flow_mode;
+			uint8_t   mux_id;
 		} flow_control_prop;
 
 		/* Return values for RMNET_IOCTL_GET_EP_PAIR */
 		struct {
-			__u32   consumer_pipe_num;
-			__u32   producer_pipe_num;
+			uint32_t   consumer_pipe_num;
+			uint32_t   producer_pipe_num;
 		} ipa_ep_pair;
 
 		struct {
-			__u32 __data; /* Placeholder for legacy data*/
-			__u32 agg_size;
-			__u32 agg_count;
+			uint32_t __data; /* Placeholder for legacy data*/
+			uint32_t agg_size;
+			uint32_t agg_count;
 		} ingress_format;
 
 		/* Input values for the RMNET_IOCTL_SET_OFFLOAD */
 		struct {
-			__u32   flags;
-			__u8    mux_id;
+			uint32_t   flags;
+			uint8_t    mux_id;
 		} offload_params;
-
-		/* Input values for the RMNET_IOCTL_SET_MTU */
-		struct {
-			__s8    if_name[IFNAMSIZ];
-			/* if given non-zero value, mtu has changed */
-			__u16   mtu_v4;
-			__u16   mtu_v6;
-		} mtu_params;
 	} u;
 };
 
 struct rmnet_ioctl_data_s {
 	union {
-		__u32	operation_mode;
-		__u32	tcm_handle;
+		uint32_t	operation_mode;
+		uint32_t	tcm_handle;
 	} u;
 };
 
@@ -169,13 +157,13 @@ struct rmnet_ioctl_data_s {
 struct QMI_QOS_HDR_S {
 	unsigned char    version;
 	unsigned char    flags;
-	__u32         flow_id;
+	uint32_t         flow_id;
 } __attribute((__packed__));
 
 /* QMI QoS 8-byte header. */
 struct qmi_qos_hdr8_s {
 	struct QMI_QOS_HDR_S   hdr;
-	__u8                reserved[2];
+	uint8_t                reserved[2];
 } __attribute((__packed__));
 
 #endif /* _MSM_RMNET_H_ */

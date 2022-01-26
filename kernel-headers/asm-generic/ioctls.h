@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 #ifndef __ASM_GENERIC_IOCTLS_H
 #define __ASM_GENERIC_IOCTLS_H
 
@@ -79,8 +79,7 @@
 #define TIOCGPTLCK	_IOR('T', 0x39, int) /* Get Pty lock state */
 #define TIOCGEXCL	_IOR('T', 0x40, int) /* Get exclusive mode state */
 #define TIOCGPTPEER	_IO('T', 0x41) /* Safely open the slave */
-#define TIOCGISO7816	_IOR('T', 0x42, struct serial_iso7816)
-#define TIOCSISO7816	_IOWR('T', 0x43, struct serial_iso7816)
+#define TIOCFAULT	0x54EC	/* Uart fault */
 #define TIOCPMGET	0x544D	/* PM get */
 #define TIOCPMPUT	0x544E	/* PM put */
 #define TIOCPMACT	0x544F	/* PM is active */

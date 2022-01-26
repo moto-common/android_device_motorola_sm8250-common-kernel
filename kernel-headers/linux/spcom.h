@@ -6,7 +6,7 @@
 #ifndef _SPCOM_H_
 #define _SPCOM_H_
 
-#include <linux/types.h>	/* __u32, bool */
+#include <linux/types.h>	/* uint32_t, bool */
 #ifndef BIT
 	#define BIT(x) (1 << x)
 #endif
@@ -75,14 +75,14 @@ enum spcom_poll_events {
 /* Common Command structure between User Space and spcom driver, on write() */
 struct spcom_user_command {
 	enum spcom_cmd_id cmd_id;
-	__u32 arg;
+	uint32_t arg;
 } __attribute__((packed));
 
 /* Command structure between User Space and spcom driver, on write() */
 struct spcom_send_command {
 	enum spcom_cmd_id cmd_id;
-	__u32 timeout_msec;
-	__u32 buf_size;
+	uint32_t timeout_msec;
+	uint32_t buf_size;
 	char buf[0]; /* Variable buffer size - must be last field */
 } __attribute__((packed));
 
@@ -91,39 +91,39 @@ struct spcom_user_create_channel_command {
 	enum spcom_cmd_id cmd_id;
 	char ch_name[SPCOM_CHANNEL_NAME_SIZE];
 #define SPCOM_IS_SHARABLE_SUPPORTED
-	_Bool is_sharable;
+	bool is_sharable;
 } __attribute__((packed));
 
 /* Command structure between userspace spcomlib and spcom driver, on write() */
 #define SPCOM_USER_RESTART_SP_CMD
 struct spcom_user_restart_sp_command {
 	enum spcom_cmd_id cmd_id;
-	__u32 arg;
+	uint32_t arg;
 #define SPCOM_IS_UPDATED_SUPPORETED
-	__u32 is_updated;
+	uint32_t is_updated;
 } __attribute__((packed));
 
 /* maximum ION buf for send-modfied-command */
 #define SPCOM_MAX_ION_BUF 4
 
 struct spcom_ion_info {
-	__s32 fd; /* ION buffer File Descriptor, set -1 for invalid fd */
-	__u32 buf_offset; /* virtual address offset in request/response */
+	int32_t fd; /* ION buffer File Descriptor, set -1 for invalid fd */
+	uint32_t buf_offset; /* virtual address offset in request/response */
 };
 
 /* Pass this FD to unlock all ION buffer for the specific channel */
 #define SPCOM_ION_FD_UNLOCK_ALL	0xFFFF
 
 struct spcom_ion_handle {
-	__s32 fd;		/* File Descriptor associated with the buffer */
+	int32_t fd;		/* File Descriptor associated with the buffer */
 };
 
 /* Command structure between User Space and spcom driver, on write() */
 struct spcom_user_send_modified_command {
 	enum spcom_cmd_id cmd_id;
 	struct spcom_ion_info ion_info[SPCOM_MAX_ION_BUF];
-	__u32 timeout_msec;
-	__u32 buf_size;
+	uint32_t timeout_msec;
+	uint32_t buf_size;
 	char buf[0]; /* Variable buffer size - must be last field */
 } __attribute__((packed));
 
@@ -139,7 +139,7 @@ enum spcom_poll_cmd_id {
 
 struct spcom_poll_param {
 	/* input parameters */
-	_Bool wait;
+	bool wait;
 	enum spcom_poll_cmd_id cmd_id;
 	/* output parameter */
 	int retval;

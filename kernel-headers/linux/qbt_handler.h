@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 /*
- * Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
  */
 
 #ifndef _QBT_HANDLER_H_
@@ -17,9 +17,6 @@
 #define QBT_CONFIGURE_TOUCH_FD   106
 #define QBT_ACQUIRE_WAKELOCK     107
 #define QBT_RELEASE_WAKELOCK     108
-
-#define QBT_GET_TOUCH_FD_VERSION  109
-#define QBT_CONFIGURE_TOUCH_FD_V2 110
 
 /*
  * enum qbt_finger_events -
@@ -53,7 +50,7 @@ enum qbt_fw_event {
  * @is_wuhb_connected - if non-zero, WUHB INT line is connected
  */
 struct qbt_wuhb_connected_status {
-	_Bool is_wuhb_connected;
+	bool is_wuhb_connected;
 };
 
 /*
@@ -75,41 +72,7 @@ struct qbt_key_event {
  * @rad_y: movement radius in y direction
  */
 struct qbt_touch_config {
-	_Bool rad_filter_enable;
-	int rad_x;
-	int rad_y;
-};
-
-/*
- * struct qbt_touch_fd_version -
- *		used to get touch finger detect version
- * @version: version number
- */
-struct qbt_touch_fd_version {
-	int version;
-};
-
-/*
- * struct qbt_touch_config_v2 -
- *		used to configure touch finger detect
- * @version - touch FD version
- * @touch_fd_enable - flag to enable/disable touch finger detect
- * @rad_filter_enable - flag to enable/disable radius based filtering
- * @left - x-coordinate of top left corner of AOI
- * @top - y-coordinate of top left corner of AOI
- * @right - x-coordinate of bottom right corner of AOI
- * @bottom - y--coordinate of bottom right corner of AOI
- * @rad_x: movement radius in x direction
- * @rad_y: movement radius in y direction
- */
-struct qbt_touch_config_v2 {
-	struct qbt_touch_fd_version version;
-	_Bool touch_fd_enable;
-	_Bool rad_filter_enable;
-	int left;
-	int top;
-	int right;
-	int bottom;
+	bool rad_filter_enable;
 	int rad_x;
 	int rad_y;
 };

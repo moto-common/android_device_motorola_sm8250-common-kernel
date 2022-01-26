@@ -128,8 +128,6 @@ enum ip_conntrack_events {
 	IPCT_SYNPROXY,		/* synproxy has been set */
 };
 
-#define IPCT_COUNTER IPCT_COUNTER
-
 enum ip_conntrack_expect_events {
 	IPEXP_NEW,		/* new expectation */
 	IPEXP_DESTROY,		/* destroyed expectation */

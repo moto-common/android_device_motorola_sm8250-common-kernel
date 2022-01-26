@@ -161,7 +161,6 @@ enum {
 	IFLA_EVENT,
 	IFLA_NEW_NETNSID,
 	IFLA_IF_NETNSID,
-	IFLA_TARGET_NETNSID = IFLA_IF_NETNSID, /* new alias */
 	IFLA_CARRIER_UP_COUNT,
 	IFLA_CARRIER_DOWN_COUNT,
 	IFLA_NEW_IFINDEX,
@@ -285,8 +284,6 @@ enum {
 	IFLA_BR_MCAST_STATS_ENABLED,
 	IFLA_BR_MCAST_IGMP_VERSION,
 	IFLA_BR_MCAST_MLD_VERSION,
-	IFLA_BR_VLAN_STATS_PER_PORT,
-	IFLA_BR_MULTI_BOOLOPT,
 	__IFLA_BR_MAX,
 };
 
@@ -532,7 +529,6 @@ enum {
 	IFLA_VXLAN_LABEL,
 	IFLA_VXLAN_GPE,
 	IFLA_VXLAN_TTL_INHERIT,
-	IFLA_VXLAN_DF,
 	__IFLA_VXLAN_MAX
 };
 #define IFLA_VXLAN_MAX	(__IFLA_VXLAN_MAX - 1)
@@ -540,14 +536,6 @@ enum {
 struct ifla_vxlan_port_range {
 	__be16	low;
 	__be16	high;
-};
-
-enum ifla_vxlan_df {
-	VXLAN_DF_UNSET = 0,
-	VXLAN_DF_SET,
-	VXLAN_DF_INHERIT,
-	__VXLAN_DF_END,
-	VXLAN_DF_MAX = __VXLAN_DF_END - 1,
 };
 
 /* GENEVE section */
@@ -564,19 +552,9 @@ enum {
 	IFLA_GENEVE_UDP_ZERO_CSUM6_TX,
 	IFLA_GENEVE_UDP_ZERO_CSUM6_RX,
 	IFLA_GENEVE_LABEL,
-	IFLA_GENEVE_TTL_INHERIT,
-	IFLA_GENEVE_DF,
 	__IFLA_GENEVE_MAX
 };
 #define IFLA_GENEVE_MAX	(__IFLA_GENEVE_MAX - 1)
-
-enum ifla_geneve_df {
-	GENEVE_DF_UNSET = 0,
-	GENEVE_DF_SET,
-	GENEVE_DF_INHERIT,
-	__GENEVE_DF_END,
-	GENEVE_DF_MAX = __GENEVE_DF_END - 1,
-};
 
 /* PPP section */
 enum {
@@ -634,7 +612,6 @@ enum {
 	IFLA_BOND_AD_USER_PORT_KEY,
 	IFLA_BOND_AD_ACTOR_SYSTEM,
 	IFLA_BOND_TLB_DYNAMIC_LB,
-	IFLA_BOND_PEER_NOTIF_DELAY,
 	__IFLA_BOND_MAX,
 };
 
@@ -693,7 +670,6 @@ enum {
 	IFLA_VF_IB_NODE_GUID,	/* VF Infiniband node GUID */
 	IFLA_VF_IB_PORT_GUID,	/* VF Infiniband port GUID */
 	IFLA_VF_VLAN_LIST,	/* nested list of vlans, option for QinQ */
-	IFLA_VF_BROADCAST,	/* VF broadcast */
 	__IFLA_VF_MAX,
 };
 
@@ -702,10 +678,6 @@ enum {
 struct ifla_vf_mac {
 	__u32 vf;
 	__u8 mac[32]; /* MAX_ADDR_LEN */
-};
-
-struct ifla_vf_broadcast {
-	__u8 broadcast[32];
 };
 
 struct ifla_vf_vlan {
@@ -929,7 +901,6 @@ enum {
 enum {
 	LINK_XSTATS_TYPE_UNSPEC,
 	LINK_XSTATS_TYPE_BRIDGE,
-	LINK_XSTATS_TYPE_BOND,
 	__LINK_XSTATS_TYPE_MAX
 };
 #define LINK_XSTATS_TYPE_MAX (__LINK_XSTATS_TYPE_MAX - 1)
@@ -1011,6 +982,10 @@ enum {
 #define RMNET_FLAGS_INGRESS_MAP_COMMANDS          (1U << 1)
 #define RMNET_FLAGS_INGRESS_MAP_CKSUMV4           (1U << 2)
 #define RMNET_FLAGS_EGRESS_MAP_CKSUMV4            (1U << 3)
+#define RMNET_FLAGS_INGRESS_COALESCE              (1U << 4)
+#define RMNET_FLAGS_INGRESS_MAP_CKSUMV5           (1U << 5)
+#define RMNET_FLAGS_EGRESS_MAP_CKSUMV5            (1U << 6)
+#define RMNET_FLAGS_EGRESS_MAP_CKSUMV3            (1U << 7)
 
 enum {
 	IFLA_RMNET_UNSPEC,

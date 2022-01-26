@@ -894,8 +894,6 @@ struct usb_ext_cap_descriptor {		/* Link Power Management */
 #define USB_BESL_SUPPORT		(1 << 2)	/* supports BESL */
 #define USB_BESL_BASELINE_VALID		(1 << 3)	/* Baseline BESL valid*/
 #define USB_BESL_DEEP_VALID		(1 << 4)	/* Deep BESL valid */
-#define USB_SET_BESL_BASELINE(p)	(((p) & 0xf) << 8)
-#define USB_SET_BESL_DEEP(p)		(((p) & 0xf) << 12)
 #define USB_GET_BESL_BASELINE(p)	(((p) & (0xf << 8)) >> 8)
 #define USB_GET_BESL_DEEP(p)		(((p) & (0xf << 12)) >> 12)
 } __attribute__((packed));
@@ -1082,6 +1080,26 @@ struct usb_ptm_cap_descriptor {
  * (SSAC) specified in bmAttributes[4:0]. SSAC is zero-based
  */
 #define USB_DT_USB_SSP_CAP_SIZE(ssac)	(12 + (ssac + 1) * 4)
+
+/*
+ * Configuration Summary descriptors: Defines a list of device preferred
+ * configurations. This descriptor may be used by Host software to decide
+ * which Configuration to use to obtain the desired functionality.
+ */
+#define USB_CAP_TYPE_CONFIG_SUMMARY	0x10
+#define USB_CONFIG_SUMMARY_DESC_REV	0x100
+
+struct usb_config_summary_descriptor {
+	__u8 bLength;
+	__u8 bDescriptorType;
+	__u8 bDevCapabilityType;
+	__u16 bcdVersion;
+	__u8 bClass;
+	__u8 bSubClass;
+	__u8 bProtocol;
+	__u8 bConfigurationCount;
+	__u8 bConfigurationIndex[];
+} __attribute__((packed));
 
 /*-------------------------------------------------------------------------*/
 

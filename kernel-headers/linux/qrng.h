@@ -1,7 +1,4 @@
 /* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
-/*
- * Copyright (c) 2020, The Linux Foundation. All rights reserved.
- */
 #ifndef _QRNG_H_
 #define _QRNG_H_
 

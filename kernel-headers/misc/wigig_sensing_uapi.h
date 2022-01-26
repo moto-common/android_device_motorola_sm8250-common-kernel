@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
 /*
- * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2019, The Linux Foundation. All rights reserved.
  */
 #ifndef __WIGIG_SENSING_UAPI_H__
 #define __WIGIG_SENSING_UAPI_H__
@@ -20,9 +20,9 @@ enum wigig_sensing_mode {
 
 struct wigig_sensing_change_mode {
 	enum wigig_sensing_mode mode;
-	_Bool has_channel;
-	__u32 channel;
-	__u32 burst_size;
+	bool has_channel;
+	uint32_t channel;
+	uint32_t burst_size;
 };
 
 enum wigig_sensing_event {
@@ -78,11 +78,11 @@ enum wigig_sensing_event {
 	_IO(WIGIG_SENSING_IOC_MAGIC, WIGIG_SENSING_IOCTL_CLEAR_DATA)
 
 /**
- * Get number of bursts that where dropped due to data buffer overflow
+ * Get number of bursts that were dropped due to data buffer overflow
  */
 #define WIGIG_SENSING_IOC_GET_NUM_DROPPED_BURSTS \
 	_IOR(WIGIG_SENSING_IOC_MAGIC, \
-	     WIGIG_SENSING_IOCTL_GET_NUM_DROPPED_BURSTS, uint32_t)
+	     WIGIG_SENSING_IOCTL_GET_NUM_DROPPED_BURSTS, sizeof(uint32_t))
 
 /**
  * Get asynchronous event (FW_READY, RESET)

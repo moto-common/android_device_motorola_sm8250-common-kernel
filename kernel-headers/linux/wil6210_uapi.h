@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: ISC */
 /*
  * Copyright (c) 2014 Qualcomm Atheros, Inc.
- * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2019, The Linux Foundation. All rights reserved.
  */
 
 #ifndef __WIL6210_UAPI_H__
@@ -9,7 +9,6 @@
 
 #define __user
 
-#include <linux/types.h>
 #include <linux/sockios.h>
 
 /* Numbers SIOCDEVPRIVATE and SIOCDEVPRIVATE + 1
@@ -56,16 +55,16 @@
 #define WIL_MMIO_ADDR_MASK 0xff00
 
 struct wil_memio {
-	__u32 op; /* enum wil_memio_op */
-	__u32 addr; /* should be 32-bit aligned */
-	__u32 val;
+	uint32_t op; /* enum wil_memio_op */
+	uint32_t addr; /* should be 32-bit aligned */
+	uint32_t val;
 };
 
 struct wil_memio_block {
-	__u32 op; /* enum wil_memio_op */
-	__u32 addr; /* should be 32-bit aligned */
-	__u32 size; /* should be multiple of 4 */
-	__u64 block; /* block address */
+	uint32_t op; /* enum wil_memio_op */
+	uint32_t addr; /* should be 32-bit aligned */
+	uint32_t size; /* should be multiple of 4 */
+	uint64_t block; /* block address */
 };
 
 #endif /* __WIL6210_UAPI_H__ */

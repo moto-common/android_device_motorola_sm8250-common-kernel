@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 /*
- * Copyright (c) 2018-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2018-2021, The Linux Foundation. All rights reserved.
  */
 
 #ifndef _MSM_KGSL_H
@@ -127,10 +127,10 @@
 /* --- Memory allocation flags --- */
 
 /* General allocation hints */
-#define KGSL_MEMFLAGS_SECURE       (1ULL << 3)
-#define KGSL_MEMFLAGS_GPUREADONLY  (1ULL << 24)
-#define KGSL_MEMFLAGS_GPUWRITEONLY (1ULL << 25)
-#define KGSL_MEMFLAGS_FORCE_32BIT  (1ULL << 32)
+#define KGSL_MEMFLAGS_SECURE      0x00000008ULL
+#define KGSL_MEMFLAGS_GPUREADONLY 0x01000000U
+#define KGSL_MEMFLAGS_GPUWRITEONLY 0x02000000U
+#define KGSL_MEMFLAGS_FORCE_32BIT 0x100000000ULL
 
 /* Flag for binding all the virt range to single phys data */
 #define KGSL_SPARSE_BIND_MULTIPLE_TO_PHYS 0x400000000ULL
@@ -146,11 +146,10 @@
 #define KGSL_CACHEMODE_WRITETHROUGH 2
 #define KGSL_CACHEMODE_WRITEBACK 3
 
-#define KGSL_MEMFLAGS_USE_CPU_MAP (1ULL << 28)
-#define KGSL_MEMFLAGS_SPARSE_PHYS (1ULL << 29)
-#define KGSL_MEMFLAGS_SPARSE_VIRT (1ULL << 30)
-#define KGSL_MEMFLAGS_IOCOHERENT  (1ULL << 31)
-#define KGSL_MEMFLAGS_GUARD_PAGE  (1ULL << 33)
+#define KGSL_MEMFLAGS_USE_CPU_MAP 0x10000000ULL
+#define KGSL_MEMFLAGS_SPARSE_PHYS 0x20000000ULL
+#define KGSL_MEMFLAGS_SPARSE_VIRT 0x40000000ULL
+#define KGSL_MEMFLAGS_IOCOHERENT  0x80000000ULL
 
 /* Memory types for which allocations are made */
 #define KGSL_MEMTYPE_MASK		0x0000FF00
@@ -268,7 +267,7 @@ struct kgsl_devinfo {
 	 * number 200, 205, 220, etc...
 	 */
 	unsigned int gpu_id;
-	__kernel_size_t gmem_sizebytes;
+	size_t gmem_sizebytes;
 };
 
 /*
@@ -343,9 +342,9 @@ enum kgsl_timestamp_type {
 #define KGSL_PROP_CONTEXT_PROPERTY	0x28
 
 /*
- * kgsl_capabilities_properties returns a list of supported properties.
+ * kgsl_capabilties_properties returns a list of supported properties.
  * If the user passes 0 for 'count' the kernel will set it to the number of
- * supported properties. The list is expected to be 'count * sizeof(__u32)'
+ * supported properties. The list is expected to be 'count * sizeof(uint32_t)'
  * bytes long. The kernel will return the actual number of entries copied into
  * list via 'count'.
  */
@@ -361,7 +360,7 @@ struct kgsl_capabilities_properties {
 #define KGSL_QUERY_CAPS_PROPERTIES 1
 
 /*
- * kgsl_capabilities allows the user to query kernel capabilities. The 'data'
+ * kgsl_capabilities allows the user to query kernel capabiilties. The 'data'
  * type should be set appropriately for the querytype (see above). Pass 0 to
  * 'size' and the kernel will set it to the expected size of 'data' that is
  * appropriate for querytype (in bytes).
@@ -374,18 +373,18 @@ struct kgsl_capabilities {
 
 struct kgsl_shadowprop {
 	unsigned long gpuaddr;
-	__kernel_size_t size;
+	size_t size;
 	unsigned int flags; /* contains KGSL_FLAGS_ values */
 };
 
 struct kgsl_qdss_stm_prop {
-	__u64 gpuaddr;
-	__u64 size;
+	uint64_t gpuaddr;
+	uint64_t size;
 };
 
 struct kgsl_qtimer_prop {
-	__u64 gpuaddr;
-	__u64 size;
+	uint64_t gpuaddr;
+	uint64_t size;
 };
 
 struct kgsl_version {
@@ -396,8 +395,8 @@ struct kgsl_version {
 };
 
 struct kgsl_sp_generic_mem {
-	__u64 local;
-	__u64 pvt;
+	uint64_t local;
+	uint64_t pvt;
 };
 
 struct kgsl_ucode_version {
@@ -467,11 +466,7 @@ struct kgsl_context_property_fault {
 #define KGSL_PERFCOUNTER_GROUP_GLC 0x24
 #define KGSL_PERFCOUNTER_GROUP_FCHE 0x25
 #define KGSL_PERFCOUNTER_GROUP_MHUB 0x26
-#define KGSL_PERFCOUNTER_GROUP_GMU_XOCLK 0x27
-#define KGSL_PERFCOUNTER_GROUP_GMU_GMUCLK  0x28
-#define KGSL_PERFCOUNTER_GROUP_GMU_PERF  0x29
-#define KGSL_PERFCOUNTER_GROUP_SW 0x2a
-#define KGSL_PERFCOUNTER_GROUP_MAX 0x2b
+#define KGSL_PERFCOUNTER_GROUP_MAX 0x27
 
 #define KGSL_PERFCOUNTER_NOT_USED 0xFFFFFFFF
 #define KGSL_PERFCOUNTER_BROKEN 0xFFFFFFFE
@@ -480,7 +475,7 @@ struct kgsl_context_property_fault {
 struct kgsl_ibdesc {
 	unsigned long gpuaddr;
 	unsigned long __pad;
-	__kernel_size_t sizedwords;
+	size_t sizedwords;
 	unsigned int ctrl;
 };
 
@@ -500,11 +495,11 @@ struct kgsl_ibdesc {
  * execution time
  */
 struct kgsl_cmdbatch_profiling_buffer {
-	__u64 wall_clock_s;
-	__u64 wall_clock_ns;
-	__u64 gpu_ticks_queued;
-	__u64 gpu_ticks_submitted;
-	__u64 gpu_ticks_retired;
+	uint64_t wall_clock_s;
+	uint64_t wall_clock_ns;
+	uint64_t gpu_ticks_queued;
+	uint64_t gpu_ticks_submitted;
+	uint64_t gpu_ticks_retired;
 };
 
 /* ioctls */
@@ -524,7 +519,7 @@ struct kgsl_cmdbatch_profiling_buffer {
 struct kgsl_device_getproperty {
 	unsigned int type;
 	void *value;
-	__kernel_size_t sizebytes;
+	size_t sizebytes;
 };
 
 #define IOCTL_KGSL_DEVICE_GETPROPERTY \
@@ -640,8 +635,8 @@ struct kgsl_drawctxt_destroy {
 struct kgsl_map_user_mem {
 	int fd;
 	unsigned long gpuaddr;   /*output param */
-	__kernel_size_t len;
-	__kernel_size_t offset;
+	size_t len;
+	size_t offset;
 	unsigned long hostptr;   /*input param */
 	enum kgsl_user_mem_type memtype;
 	unsigned int flags;
@@ -787,7 +782,7 @@ struct kgsl_cmdwindow_write {
 
 struct kgsl_gpumem_alloc {
 	unsigned long gpuaddr; /* output param */
-	__kernel_size_t size;
+	size_t size;
 	unsigned int flags;
 };
 
@@ -796,7 +791,7 @@ struct kgsl_gpumem_alloc {
 
 struct kgsl_cff_syncmem {
 	unsigned long gpuaddr;
-	__kernel_size_t len;
+	size_t len;
 	unsigned int __pad[2]; /* For future binary compatibility */
 };
 
@@ -814,7 +809,7 @@ struct kgsl_timestamp_event {
 	unsigned int timestamp;  /* Timestamp to trigger event on */
 	unsigned int context_id; /* Context for the timestamp */
 	void *priv;	 /* Pointer to the event specific blob */
-	__kernel_size_t len;              /* Size of the event specific blob */
+	size_t len;              /* Size of the event specific blob */
 };
 
 #define IOCTL_KGSL_TIMESTAMP_EVENT_OLD \
@@ -869,8 +864,8 @@ struct kgsl_timestamp_event_fence {
 struct kgsl_gpumem_alloc_id {
 	unsigned int id;
 	unsigned int flags;
-	__kernel_size_t size;
-	__kernel_size_t mmapsize;
+	size_t size;
+	size_t mmapsize;
 	unsigned long gpuaddr;
 /* private: reserved for future use*/
 	unsigned long __pad[2];
@@ -915,8 +910,8 @@ struct kgsl_gpumem_get_info {
 	unsigned long gpuaddr;
 	unsigned int id;
 	unsigned int flags;
-	__kernel_size_t size;
-	__kernel_size_t mmapsize;
+	size_t size;
+	size_t mmapsize;
 	unsigned long useraddr;
 /* private: reserved for future use*/
 	unsigned long __pad[4];
@@ -943,8 +938,8 @@ struct kgsl_gpumem_sync_cache {
 	unsigned long gpuaddr;
 	unsigned int id;
 	unsigned int op;
-	__kernel_size_t offset;
-	__kernel_size_t length;
+	size_t offset;
+	size_t length;
 };
 
 #define KGSL_GPUMEM_CACHE_CLEAN (1 << 0)
@@ -1135,7 +1130,7 @@ struct kgsl_cmd_syncpoint_timeline {
 struct kgsl_cmd_syncpoint {
 	int type;
 	void *priv;
-	__kernel_size_t size;
+	size_t size;
 };
 
 /* Flag to indicate that the cmdlist may contain memlists */
@@ -1189,7 +1184,7 @@ struct kgsl_device_constraint {
 	unsigned int type;
 	unsigned int context_id;
 	void *data;
-	__kernel_size_t size;
+	size_t size;
 };
 
 /* Constraint Type*/
@@ -1290,8 +1285,8 @@ struct kgsl_syncsource_signal_fence {
  * @id: ID of the GPU object to sync
  */
 struct kgsl_cff_sync_gpuobj {
-	__u64 offset;
-	__u64 length;
+	uint64_t offset;
+	uint64_t length;
 	unsigned int id;
 };
 
@@ -1309,13 +1304,13 @@ struct kgsl_cff_sync_gpuobj {
  * @metadata: Pointer to the user specified metadata to store for the object
  */
 struct kgsl_gpuobj_alloc {
-	__u64 size;
-	__u64 flags;
-	__u64 va_len;
-	__u64 mmapsize;
+	uint64_t size;
+	uint64_t flags;
+	uint64_t va_len;
+	uint64_t mmapsize;
 	unsigned int id;
 	unsigned int metadata_len;
-	__u64 metadata;
+	uint64_t metadata;
 };
 
 /* Let the user know that this header supports the gpuobj metadata */
@@ -1335,8 +1330,8 @@ struct kgsl_gpuobj_alloc {
  * @len: Length of the data passed in priv
  */
 struct kgsl_gpuobj_free {
-	__u64 flags;
-	__u64 priv;
+	uint64_t flags;
+	uint64_t priv;
 	unsigned int id;
 	unsigned int type;
 	unsigned int len;
@@ -1379,11 +1374,11 @@ struct kgsl_gpu_event_fence {
  * id - GPU object ID of the object to query
  */
 struct kgsl_gpuobj_info {
-	__u64 gpuaddr;
-	__u64 flags;
-	__u64 size;
-	__u64 va_len;
-	__u64 va_addr;
+	uint64_t gpuaddr;
+	uint64_t flags;
+	uint64_t size;
+	uint64_t va_len;
+	uint64_t va_addr;
 	unsigned int id;
 };
 
@@ -1399,9 +1394,9 @@ struct kgsl_gpuobj_info {
  * @id: Returns the ID of the new GPU object
  */
 struct kgsl_gpuobj_import {
-	__u64 priv;
-	__u64 priv_len;
-	__u64 flags;
+	uint64_t priv;
+	uint64_t priv_len;
+	uint64_t flags;
 	unsigned int type;
 	unsigned int id;
 };
@@ -1419,7 +1414,7 @@ struct kgsl_gpuobj_import_dma_buf {
  * @virtaddr: Virtual address of the object to import
  */
 struct kgsl_gpuobj_import_useraddr {
-	__u64 virtaddr;
+	uint64_t virtaddr;
 };
 
 #define IOCTL_KGSL_GPUOBJ_IMPORT \
@@ -1434,8 +1429,8 @@ struct kgsl_gpuobj_import_useraddr {
  */
 
 struct kgsl_gpuobj_sync_obj {
-	__u64 offset;
-	__u64 length;
+	uint64_t offset;
+	uint64_t length;
 	unsigned int id;
 	unsigned int op;
 };
@@ -1448,7 +1443,7 @@ struct kgsl_gpuobj_sync_obj {
  */
 
 struct kgsl_gpuobj_sync {
-	__u64 objs;
+	uint64_t objs;
 	unsigned int obj_len;
 	unsigned int count;
 };
@@ -1465,9 +1460,9 @@ struct kgsl_gpuobj_sync {
  * @id - GPU command object ID
  */
 struct kgsl_command_object {
-	__u64 offset;
-	__u64 gpuaddr;
-	__u64 size;
+	uint64_t offset;
+	uint64_t gpuaddr;
+	uint64_t size;
 	unsigned int flags;
 	unsigned int id;
 };
@@ -1479,8 +1474,8 @@ struct kgsl_command_object {
  * @type: type of sync point defined here
  */
 struct kgsl_command_syncpoint {
-	__u64 priv;
-	__u64 size;
+	uint64_t priv;
+	uint64_t size;
 	unsigned int type;
 };
 
@@ -1500,14 +1495,14 @@ struct kgsl_command_syncpoint {
  * @timestamp: Timestamp for the submitted commands
  */
 struct kgsl_gpu_command {
-	__u64 flags;
-	__u64 cmdlist;
+	uint64_t flags;
+	uint64_t cmdlist;
 	unsigned int cmdsize;
 	unsigned int numcmds;
-	__u64 objlist;
+	uint64_t objlist;
 	unsigned int objsize;
 	unsigned int numobjs;
-	__u64 synclist;
+	uint64_t synclist;
 	unsigned int syncsize;
 	unsigned int numsyncs;
 	unsigned int context_id;
@@ -1535,7 +1530,7 @@ struct kgsl_gpu_command {
  * returned back.
  */
 struct kgsl_preemption_counters_query {
-	__u64 counters;
+	uint64_t counters;
 	unsigned int size_user;
 	unsigned int size_priority_level;
 	unsigned int max_priority_level;
@@ -1559,8 +1554,8 @@ struct kgsl_preemption_counters_query {
 #define KGSL_GPUOBJ_SET_INFO_TYPE (1 << 1)
 
 struct kgsl_gpuobj_set_info {
-	__u64 flags;
-	__u64 metadata;
+	uint64_t flags;
+	uint64_t metadata;
 	unsigned int id;
 	unsigned int metadata_len;
 	unsigned int type;
@@ -1577,9 +1572,9 @@ struct kgsl_gpuobj_set_info {
  * @id: Returned ID for this allocation
  */
 struct kgsl_sparse_phys_alloc {
-	__u64 size;
-	__u64 pagesize;
-	__u64 flags;
+	uint64_t size;
+	uint64_t pagesize;
+	uint64_t flags;
 	unsigned int id;
 };
 
@@ -1606,10 +1601,10 @@ struct kgsl_sparse_phys_free {
  * @gpuaddr: Returned GPU address for this allocation
  */
 struct kgsl_sparse_virt_alloc {
-	__u64 size;
-	__u64 pagesize;
-	__u64 flags;
-	__u64 gpuaddr;
+	uint64_t size;
+	uint64_t pagesize;
+	uint64_t flags;
+	uint64_t gpuaddr;
 	unsigned int id;
 };
 
@@ -1636,10 +1631,10 @@ struct kgsl_sparse_virt_free {
  * @id: Physical ID to bind (bind only)
  */
 struct kgsl_sparse_binding_object {
-	__u64 virtoffset;
-	__u64 physoffset;
-	__u64 size;
-	__u64 flags;
+	uint64_t virtoffset;
+	uint64_t physoffset;
+	uint64_t size;
+	uint64_t flags;
 	unsigned int id;
 };
 
@@ -1652,7 +1647,7 @@ struct kgsl_sparse_binding_object {
  *
  */
 struct kgsl_sparse_bind {
-	__u64 list;
+	uint64_t list;
 	unsigned int id;
 	unsigned int size;
 	unsigned int count;
@@ -1676,9 +1671,9 @@ struct kgsl_sparse_bind {
  * @id: Virtual ID to bind/unbind
  */
 struct kgsl_gpu_sparse_command {
-	__u64 flags;
-	__u64 sparselist;
-	__u64 synclist;
+	uint64_t flags;
+	uint64_t sparselist;
+	uint64_t synclist;
 	unsigned int sparsesize;
 	unsigned int numsparse;
 	unsigned int syncsize;

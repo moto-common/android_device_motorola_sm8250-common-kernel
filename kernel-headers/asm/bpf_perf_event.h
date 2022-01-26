@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+/* SPDX-License-Identifier: GPL-2.0 */
 #ifndef __ASM_BPF_PERF_EVENT_H__
 #define __ASM_BPF_PERF_EVENT_H__
 

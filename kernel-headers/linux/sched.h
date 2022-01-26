@@ -2,8 +2,6 @@
 #ifndef _LINUX_SCHED_H
 #define _LINUX_SCHED_H
 
-#include <linux/types.h>
-
 /*
  * cloning flags:
  */
@@ -32,50 +30,6 @@
 #define CLONE_NEWPID		0x20000000	/* New pid namespace */
 #define CLONE_NEWNET		0x40000000	/* New network namespace */
 #define CLONE_IO		0x80000000	/* Clone io context */
-
-#ifndef __ASSEMBLY__
-/**
- * struct clone_args - arguments for the clone3 syscall
- * @flags:       Flags for the new process as listed above.
- *               All flags are valid except for CSIGNAL and
- *               CLONE_DETACHED.
- * @pidfd:       If CLONE_PIDFD is set, a pidfd will be
- *               returned in this argument.
- * @child_tid:   If CLONE_CHILD_SETTID is set, the TID of the
- *               child process will be returned in the child's
- *               memory.
- * @parent_tid:  If CLONE_PARENT_SETTID is set, the TID of
- *               the child process will be returned in the
- *               parent's memory.
- * @exit_signal: The exit_signal the parent process will be
- *               sent when the child exits.
- * @stack:       Specify the location of the stack for the
- *               child process.
- *               Note, @stack is expected to point to the
- *               lowest address. The stack direction will be
- *               determined by the kernel and set up
- *               appropriately based on @stack_size.
- * @stack_size:  The size of the stack for the child process.
- * @tls:         If CLONE_SETTLS is set, the tls descriptor
- *               is set to tls.
- *
- * The structure is versioned by size and thus extensible.
- * New struct members must go at the end of the struct and
- * must be properly 64bit aligned.
- */
-struct clone_args {
-	__aligned_u64 flags;
-	__aligned_u64 pidfd;
-	__aligned_u64 child_tid;
-	__aligned_u64 parent_tid;
-	__aligned_u64 exit_signal;
-	__aligned_u64 stack;
-	__aligned_u64 stack_size;
-	__aligned_u64 tls;
-};
-#endif
-
-#define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
 
 /*
  * Scheduling policies
